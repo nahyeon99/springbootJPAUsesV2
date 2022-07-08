@@ -8,12 +8,52 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 public class MemberApiController {
 
     private final MemberService memberService;
+
+    /**
+     * 회원 조회
+     */
+    @GetMapping("/api/v1/members")
+    public List<Member> memberV1() {
+        return memberService.findMembers();
+    }
+
+    @GetMapping("/api/v2/members")
+    public Result memberV2() {
+        List<Member> findMembers = memberService.findMembers();
+        // MemberDto가 object로 감싸서 내보냄
+        List<MemberDto> collect = findMembers.stream() // List<Member>를 List<MemberDto>로 변경
+                .map(m -> new MemberDto(m.getName()))
+                .collect(Collectors.toList());
+        return new Result(collect);
+//        return new Result(collect.size(), collect);
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Result<T> {
+//        private int count;
+        private T data; // data field의 값은 List가 나가게 될 것
+        // List(컬렉션)를 바로 나가게 하면 json의 배열 타입으로 나가게 되기 때문에 제네릭 타입으로 한 번 감싸줘야 한다.
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class MemberDto {
+        private String name; // api spec으로 노출할 것만 dto에 작성
+        // 엔티티의 전체적인 것을 노출하는 것이 아닌 보여줘야할 필요가 있는 것들만 보여주게끔
+    }
+
+    /**
+     * 회원 생성
+     */
 
     @PostMapping("/api/v1/members")
     public CreateMemberResponse saveMemberV1(@RequestBody @Valid Member member) {
