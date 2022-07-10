@@ -22,7 +22,8 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY) // 지연 로딩, db에서 안끌고 온다는 뜻으로 order에 대해서만 db에서 가져옴
+    // 실제 member 객체를 가져오는 것이 아닌 proxy 가슐로 ByteBuddyInterceptor()로 선언되어 있는데 생략되어 있다고 보면 됨
     @JoinColumn(name="member_id")
     private Member member;
 
