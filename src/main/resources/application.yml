@@ -7,7 +7,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none # table drop 방지
+      ddl-auto: create
     properties:
       hibernate:
 #        show_sql: true
