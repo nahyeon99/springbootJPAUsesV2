@@ -57,6 +57,14 @@ public class OrderRepository {
         ).getResultList();
     }
 
+    public List<OrderSimpleQueryDTO> findOrderDtos() {
+        return em.createQuery(
+                        "select new jpabook2.jpashop2.repository.OrderSimpleQueryDTO(o.id, m.name, o.orderDate, o.status, d.address)" +
+                                " from Order o" +
+                                " join o.member m" +
+                    " join o.delivery d", OrderSimpleQueryDTO.class)
+                    .getResultList();
+    }
 
 
 }

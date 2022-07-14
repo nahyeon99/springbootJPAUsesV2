@@ -55,6 +55,14 @@ public class MemberApiController {
      * 회원 생성
      */
 
+    /*
+         쿼리 방식 선택 권장 순서
+         1. 우선 엔티티를 DTO로 변환하는 방법을 선택
+         2. 필요하면 패치 조인으로 성능을 최적화 한다. -> 대부분의 성능 이슈가 해결
+         3. 그래도 안되면 DTO로 직접 조회하는 방법을 사용
+         4. 최후의 방법은 JPA가 제공하는 네이티브 SQL이나 스프링 JDBC Template을 사용해서 SQL을 직접 사용한다.
+     */
+
     @PostMapping("/api/v1/members")
     public CreateMemberResponse saveMemberV1(@RequestBody @Valid Member member) {
 
