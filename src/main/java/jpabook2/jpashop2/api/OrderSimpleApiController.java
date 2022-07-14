@@ -57,6 +57,17 @@ public class OrderSimpleApiController {
         return result;
     }
 
+    // fetch join 이용해서 query가 5번->1번으로 나옴
+    @GetMapping("/api/v3/simple-orders")
+    public List<SimpleOrderDto> orderV3() {
+        List<Order> orders = orderRepository.findAllWithMemberDelivery();
+        List<SimpleOrderDto> result = orders.stream()
+                .map(o -> new SimpleOrderDto(o))
+                .collect(Collectors.toList());
+
+        return result;
+    }
+
     // api spec을 명확하게 규정하기 위해 사용하는 dto
     @Data
     static class SimpleOrderDto { // 고객 주소가 아닌 배송지 정보

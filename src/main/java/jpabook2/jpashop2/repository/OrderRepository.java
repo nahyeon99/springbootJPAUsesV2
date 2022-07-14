@@ -46,4 +46,17 @@ public class OrderRepository {
 //                .getResultList();
     }
 
+    public List<Order> findAllWithMemberDelivery() {
+        // JPA에만 있는 문법인 fetch join
+        // 를 이용하여 order, member, delivery를 join해서 select로 한 번에 끌고 오는 JPQL 문
+
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class
+        ).getResultList();
+    }
+
+
+
 }
