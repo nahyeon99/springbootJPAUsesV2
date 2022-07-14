@@ -67,4 +67,17 @@ public class OrderRepository {
     }
 
 
+    public List<Order> findAllWithItem() {
+        // fetch join 하면서 데이터가 뻥튀기 됨
+        // distinct keyword를 사용함으로써 orderId의 중복 시 중복된 row를 날려준다.
+        // 1. db의 distinct 키워드를 날려준다.
+        // 2. root entity(아래 경우 Order)가 중복인 경우 중복을 걸러서 collection에 담아준다.
+        return em.createQuery(
+                "select distinct o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d" +
+                        " join fetch o.orderItems oi" +
+                        " join fetch oi.item i", Order.class)
+                .getResultList();
+    }
 }
